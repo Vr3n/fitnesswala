@@ -20,6 +20,7 @@ const schema = z.object({
   fullName: z.string().min(1, { message: "Full name is required" }),
   mobileNumber: z
     .string()
+    .length(10, { message: "Mobile number must be exactly 10 digits" })
     .regex(/^\d+$/, { message: "Mobile number should only contain digits" }),
   email: z
     .string()
@@ -50,7 +51,7 @@ const MeasurementsForm = () => {
     formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    mode: "onChange",
+    mode: "onBlur",
   });
 
   const onSubmit = (data: FormData) => {
@@ -124,6 +125,12 @@ const MeasurementsForm = () => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
+                backgroundColor={
+                  errors.fullName ? "$red10" : isValid ? "$green4" : undefined
+                }
+                borderColor={
+                  errors.fullName ? "$red10" : isValid ? "$green10" : undefined
+                }
               />
             )}
           />
@@ -139,14 +146,39 @@ const MeasurementsForm = () => {
               name="mobileNumber"
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  id="mobileNumber"
-                  placeholder="Mobile Number"
-                  keyboardType="phone-pad"
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
+                <>
+                  <Input
+                    id="mobileNumber"
+                    placeholder="Mobile Number"
+                    keyboardType="phone-pad"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    backgroundColor={
+                      errors.mobileNumber
+                        ? "$red10"
+                        : isValid
+                        ? "$green4"
+                        : undefined
+                    }
+                    borderColor={
+                      errors.mobileNumber
+                        ? "$red10"
+                        : isValid
+                        ? "$green10"
+                        : undefined
+                    }
+                  />
+                  {value && (
+                    <Text
+                      color={isValid ? "$green10" : undefined}
+                      fontSize="$1"
+                      mt="$1"
+                    >
+                      {`${10 - value.length} characters left`}
+                    </Text>
+                  )}
+                </>
               )}
             />
             {errors.mobileNumber && (
@@ -167,6 +199,12 @@ const MeasurementsForm = () => {
                   onChangeText={onChange}
                   onBlur={onBlur}
                   value={value}
+                  backgroundColor={
+                    errors.email ? "$red10" : isValid ? "$green4" : undefined
+                  }
+                  borderColor={
+                    errors.email ? "$red10" : isValid ? "$green10" : undefined
+                  }
                 />
               )}
             />
@@ -186,6 +224,12 @@ const MeasurementsForm = () => {
                   value={value?.toLocaleDateString("en-IN")}
                   placeholder="DD-MM-YYYY"
                   onPressIn={() => setShowDatePicker(true)}
+                  backgroundColor={
+                    errors.dob ? "$red10" : isValid ? "$green4" : undefined
+                  }
+                  borderColor={
+                    errors.dob ? "$red10" : isValid ? "$green10" : undefined
+                  }
                 />
                 {showDatePicker && (
                   <DateTimePicker
@@ -222,6 +266,16 @@ const MeasurementsForm = () => {
                       handleHeightChange(text, "cm");
                     }}
                     onBlur={onBlur}
+                    backgroundColor={
+                      errors.height ? "$red10" : isValid ? "$green4" : undefined
+                    }
+                    borderColor={
+                      errors.height
+                        ? "$red10"
+                        : isValid
+                        ? "$green10"
+                        : undefined
+                    }
                   />
                 ) : (
                   <XStack gap="$2">
@@ -234,6 +288,20 @@ const MeasurementsForm = () => {
                         onChange(`${text}.${heightIn}`);
                       }}
                       style={{ flex: 1 }}
+                      backgroundColor={
+                        errors.height
+                          ? "$red10"
+                          : isValid
+                          ? "$green4"
+                          : undefined
+                      }
+                      borderColor={
+                        errors.height
+                          ? "$red10"
+                          : isValid
+                          ? "$green10"
+                          : undefined
+                      }
                     />
                     <Input
                       id="heightIn"
@@ -244,6 +312,20 @@ const MeasurementsForm = () => {
                         onChange(`${heightFt}.${text}`);
                       }}
                       style={{ flex: 1 }}
+                      backgroundColor={
+                        errors.height
+                          ? "$red10"
+                          : isValid
+                          ? "$green4"
+                          : undefined
+                      }
+                      borderColor={
+                        errors.height
+                          ? "$red10"
+                          : isValid
+                          ? "$green10"
+                          : undefined
+                      }
                     />
                   </XStack>
                 )
@@ -280,6 +362,12 @@ const MeasurementsForm = () => {
                     handleWeightChange(text, weightUnit as "kg" | "lbs");
                   }}
                   onBlur={onBlur}
+                  backgroundColor={
+                    errors.weight ? "$red10" : isValid ? "$green4" : undefined
+                  }
+                  borderColor={
+                    errors.weight ? "$red10" : isValid ? "$green10" : undefined
+                  }
                 />
               )}
             />
@@ -302,7 +390,7 @@ const MeasurementsForm = () => {
         </XStack>
 
         <Button
-          bg={!isValid ? "$gray10" : "$purple10Light"}
+          bg={!isValid ? "$gray10" : "$blue10Light"}
           onPress={handleSubmit(onSubmit)}
           disabled={!isValid}
         >
