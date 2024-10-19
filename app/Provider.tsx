@@ -10,7 +10,7 @@ export function Provider({ children, ...rest }: Omit<TamaguiProviderProps, 'conf
   return (
     <TamaguiProvider
       config={config}
-      defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}
+      defaultTheme={colorScheme === 'light' ? 'light' : 'dark'}
       {...rest}
     >
       <ToastProvider
